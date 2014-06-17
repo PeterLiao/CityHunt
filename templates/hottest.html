@@ -58,13 +58,13 @@
                       var curr_like_count = parseInt($("#like_with_post_id_"+self.id)[0].innerText);
                       if(data.result == 'like')
                       {
-                        self.className = self.className.split(" not_like").join("");
+                        self.className = self.className.split(" uk-text-muted").join("");
                         $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count + 1).toString();
                       }
                       else if(data.result == 'not_like')
                       {
                         if(self.className.indexOf('not_like') < 0)
-                            self.className = self.className + " not_like";
+                            self.className = self.className + " uk-text-muted";
                         $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count - 1).toString();
                       }
 
