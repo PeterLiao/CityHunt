@@ -1,5 +1,5 @@
 from django.db import models
-from LeaderBoard.common import *
+from LeaderBoard.common import get_formatted_timedelta_by_now
 # Create your models here.
 
 

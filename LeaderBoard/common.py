@@ -1,7 +1,6 @@
 __author__ = 'peter_c_liao'
 import datetime
 from django.utils.timezone import utc
-from LeaderBoard.models import *
 
 def get_formatted_date(date):
     return datetime.datetime.strftime(date, "%A, %b %dth").upper()
