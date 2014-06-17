@@ -1,0 +1,214 @@
+{% extends "menu.html" %}
+
+{% block fb_status_change_callback %}
+    if(fb_connected)
+    {
+        //$("#post_form").css("display", "");
+    }
+    else
+    {
+        //$("#post_form").css("display", "none");
+    }
+{% endblock %}
+
+
+{% block fb_profile_ready_callback %}
+    $("#post_form")[0].user_id.value = response_data.id;
+    $("#post_like_form")[0].user_id.value = response_data.id;
+{% endblock %}
+
+
+{% block fb_login_callback %}
+    window.location.href = "/hottest/";
+{% endblock %}
+
+
+{% block fb_logout_callback %}
+    window.location.href = "/hottest/";
+{% endblock %}
+
+
+{% block javascript %}
+    function btn_on_mouse_over(self)
+    {
+        if(self.className.indexOf('not_like') < 0)
+            self.className = self.className + " uk-text-muted";
+        else
+            self.className = self.className.split(" uk-text-muted").join("");
+    }
+    function btn_on_mouse_out(self)
+    {
+        if(self.className.indexOf('not_like') >= 0)
+            self.className = self.className + " uk-text-muted";
+        else
+            self.className = self.className.split(" uk-text-muted").join("");
+    }
+    function like(self)
+    {
+        if(isLogged())
+        {
+            $("#post_like_form")[0].post_id.value = self.id;
+            $.ajax({
+                  type: 'POST',
+                  url: '/hottest/like/add/',
+                  data: $("#post_like_form").serialize(),
+                  success: function(data)
+                  {
+                      console.log(data);
+                      var curr_like_count = parseInt($("#like_with_post_id_"+self.id)[0].innerText);
+                      if(data.result == 'like')
+                      {
+                        self.className = self.className.split(" not_like").join("");
+                        $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count + 1).toString();
+                      }
+                      else if(data.result == 'not_like')
+                      {
+                        if(self.className.indexOf('not_like') < 0)
+                            self.className = self.className + " not_like";
+                        $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count - 1).toString();
+                      }
+
+                  },
+                  error: function(err)
+                  {
+                      console.log(err);
+                  }
+            });
+        }
+    }
+    function change_textarea_rows(row)
+    {
+        $("#id_post_text")[0].rows = row.toString();
+    }
+    function submit_post()
+    {
+        if(isLogged())
+        {
+            $("#post_form").submit();
+        }
+    }
+{% endblock %}
+
+
+{% block leave_message %}
+    <form id="post_form" style="" class="uk-form uk-margin-bottom" action="/add/" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="user_id" name="user_id" value="">
+        <input type="hidden" id="city_id" name="city_id" value="1">
+        <div class="uk-form">
+            <fieldset data-uk-margin>
+                <textarea id="id_post_text" name="post_text" rows="1" style="width: 90%;" placeholder="撰寫新推文..."></textarea>
+                <input class="uk-button uk-button-primary" type="button" value="分享" onclick="submit_post();"/>
+            </fieldset>
+        </div>
+    </form>
+{% endblock %}
+
+{% block hot_list %}
+    <!-- today's hot list-->
+    <article class="uk-article">
+        <h1 class="uk-text-large uk-text-bold uk-text-muted"><i class="fa fa-calendar fa-lg"></i>  {{ today }}</h1>
+        <ul class="uk-list uk-list-space uk-margin-left">
+            {% for data in today_list %}
+                <li>
+                    <table>
+                        <tr>
+                            <td width="30px">
+                                <table>
+                                    <tr><td>
+                                        <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
+                                            <i class="fa fa-check"></i>
+                                        </a>
+                                    </td></tr>
+                                    <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
+                                </table>
+                            </td>
+                            <td width="50px">
+                                <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
+                            </td>
+                            <td>
+                                <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/">{{ data.post.post_text }}</a> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+            {% endfor %}
+        </ul>
+    </article>
+
+    <!-- yesterday's hot list-->
+    {% if yesterday_list %}
+        <article class="uk-article">
+            <h1 class="uk-text-large uk-text-bold uk-text-muted"><i class="fa fa-calendar fa-lg"></i>  {{ yesterday }}</h1>
+            <ul class="uk-list uk-list-space uk-margin-left">
+                {% for data in yesterday_list %}
+                    <li>
+                        <table>
+                            <tr>
+                                <td width="30px">
+                                    <table>
+                                        <tr><td>
+                                            <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
+                                                <i class="fa fa-check"></i>
+                                            </a>
+                                        </td></tr>
+                                        <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
+                                    </table>
+                                </td>
+                                <td width="50px">
+                                    <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
+                                </td>
+                                <td>
+                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/">{{ data.post.post_text }}</a> .
+                                    <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a> .
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
+    {%  endif  %}
+
+        <!-- two days ago -->
+    {% if two_days_ago_list %}
+        <article class="uk-article">
+            <h1 class="uk-text-large uk-text-bold uk-text-muted"><i class="fa fa-calendar fa-lg"></i>  {{ two_days_ago }}</h1>
+            <ul class="uk-list uk-list-space uk-margin-left">
+                {% for data in two_days_ago_list %}
+                    <li>
+                        <table>
+                            <tr>
+                                <td width="30px">
+                                    <table>
+                                        <tr><td>
+                                            <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
+                                                <i class="fa fa-check"></i>
+                                            </a>
+                                        </td></tr>
+                                        <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
+                                    </table>
+                                </td>
+                                <td width="50px">
+                                    <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
+                                </td>
+                                <td>
+                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/">{{ data.post.post_text }}</a> .
+                                    <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a> .
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
+    {%  endif  %}
+{% endblock %}
+
+
+{% block form %}
+    <form id="post_like_form" style="display:none" action="/hottest/like/add/" method="post">
+        {% csrf_token %}
+        {{ post_like_form.as_p }}
+    </form>
+{% endblock %}

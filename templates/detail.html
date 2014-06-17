@@ -1,0 +1,169 @@
+{% extends "menu.html" %}
+
+
+{% block hot_list %}
+{% endblock %}
+
+
+{% block fb_status_change_callback %}
+    if(fb_connected)
+    {
+        //$("#comment_form").css("display", "");
+    }
+    else
+    {
+        //$("#comment_form").css("display", "none");
+    }
+{% endblock %}
+
+
+{% block fb_profile_ready_callback %}
+    $("#comment_form")[0].user_id.value = response_data.id;
+    $("#post_like_form")[0].user_id.value = response_data.id;
+    if($("#" + response_data.id).length == 1)
+    {
+        $("#like_btn")[0].className = $("#like_btn")[0].className.split("uk-text-muted").join("");
+        console.log('you like it');
+    }
+    else
+    {
+        console.log('you not like it');
+    }
+{% endblock %}
+
+
+{% block javascript %}
+    function btn_on_mouse_over(self)
+    {
+        if($("#" + $("#comment_form")[0].user_id.value).length == 0)
+            $("#like_btn")[0].className = $("#like_btn")[0].className.split("uk-text-muted").join("");
+        else
+            $("#like_btn")[0].className = $("#like_btn")[0].className + " uk-text-muted";
+    }
+    function btn_on_mouse_out(self)
+    {
+        if($("#" + $("#comment_form")[0].user_id.value).length == 0)
+            $("#like_btn")[0].className = $("#like_btn")[0].className + " uk-text-muted";
+        else
+            $("#like_btn")[0].className = $("#like_btn")[0].className.split("uk-text-muted").join("");
+    }
+    function like(post_id)
+    {
+        if(isLogged())
+        {
+            $("#post_like_form")[0].post_id.value = post_id;
+            $.ajax({
+                  type: 'POST',
+                  url: '/hottest/like/add/',
+                  data: $("#post_like_form").serialize(),
+                  success: function(data)
+                  {
+                      console.log(data);
+                      /*var curr_like_count = parseInt($("#like_with_post_id_"+self.id)[0].innerText);
+                      if(data.result == 'like')
+                      {
+                        self.className = self.className.split(" not_like").join("");
+                        $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count + 1).toString();
+                      }
+                      else if(data.result == 'not_like')
+                      {
+                        if(self.className.indexOf('not_like') < 0)
+                            self.className = self.className + " not_like";
+                        $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count - 1).toString();
+                      }*/
+                    window.location.href = "/hottest/" + post_id;
+
+                  },
+                  error: function(err)
+                  {
+                      console.log(err);
+                  }
+            });
+        }
+    }
+    function submit_comment()
+    {
+        if(isLogged())
+        {
+            $("#comment_form").submit();
+        }
+    }
+{% endblock %}
+
+
+{% block comment_list %}
+    {% load staticfiles %}
+
+    <article class="uk-article">
+        <p class="uk-article-meta"></p>
+        <p class="uk-article-lead uk-text-bold">{{ like_list.count }} 個人推薦這則推文:</p>
+        {% for like in like_list %}
+            <img id="img_{{ like.user.fb_id }}" class="uk-margin-left uk-icon-button-40 uk-animation-scale-up" width="40px" height="40px" src="https://graph.facebook.com/{{ like.user.fb_id }}/picture?type=square" alt="">
+        {%  endfor %}
+
+    </article>
+
+    <hr class="uk-article-divider">
+
+    <ul class="uk-comment-list">
+    <li>
+        <p class="uk-article-lead uk-text-bold">{{ comment_list.count }} 個人回覆:</p>
+        <article class="uk-comment uk-margin-left">
+            <header class="uk-comment-header">
+                <img class="uk-comment-avatar uk-icon-button-40 uk-animation-scale-up" width="40px" height="40px" src="https://graph.facebook.com/{{ post_obj.user.fb_id }}/picture?type=square" alt="">
+                <h4 class="uk-comment-title">{{ post_obj.user.name }}</h4>
+                <ul class="uk-comment-meta uk-subnav uk-subnav-line">
+                    <li>{{ post_obj.pub_date_str }}</li>
+                    <li>{{ like_list.count }} 個人推薦</li>
+                    <li><a href="javascript:like({{ post_obj.id }});"><i id="like_btn" class="fa fa-check fa-lg uk-text-muted" onmouseover="btn_on_mouse_over(self);" onmouseout="btn_on_mouse_out(self);"></i></a></li>
+                </ul>
+            </header>
+            <div class="uk-comment-body">{{ post_obj.post_text }}</div>
+        </article>
+
+        <ul>
+            {% for comment in comment_list %}
+
+                    <li>
+                        <article class="uk-comment">
+                            <header class="uk-comment-header">
+                                <img class="uk-comment-avatar uk-icon-button-40 uk-animation-scale-up" width="40px" height="40px" src="https://graph.facebook.com/{{ comment.user.fb_id }}/picture?type=square" alt="">
+                                <h4 class="uk-comment-title">{{ comment.user.name }}</h4>
+                                <ul class="uk-comment-meta uk-subnav uk-subnav-line">
+                                    <li>{{ comment.pub_date_str }}</li>
+                                </ul>
+                            </header>
+                            <div class="uk-comment-body">{{ comment.comment_text }}</div>
+                        </article>
+                    </li>
+            {% endfor %}
+        <li>
+    <form id="comment_form" style="display:" class="uk-form" action="/comment/add/" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="user_id" name="user_id" value="">
+        <input type="hidden" id="post_id" name="post_id" value="{{ post_obj.id }}">
+        <div class="uk-form-row">
+            <fieldset data-uk-margin>
+                <textarea id="comment_text" name="comment_text" rows="5" style="width:90%" placeholder="回覆給{{ post_obj.user.name }}..."></textarea>
+                <input class="uk-button uk-button-primary" type="button" value="回覆" onclick="submit_comment();"/>
+            </fieldset>
+        </div>
+    </form>
+        </li>
+        </ul>
+    </li>
+    </ul>
+{% endblock %}
+
+
+{% block form %}
+    <form id="like_user_list">
+        {% for like in like_list %}
+            <input type="hidden" id="{{ like.user.fb_id }}">
+        {% endfor %}
+    </form>
+    <form id="post_like_form" style="display:none" action="/hottest/like/add/" method="post">
+        {% csrf_token %}
+        {{ post_like_form.as_p }}
+    </form>
+{% endblock %}
