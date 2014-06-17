@@ -97,7 +97,7 @@
         <input type="hidden" id="city_id" name="city_id" value="1">
         <div class="uk-form">
             <fieldset data-uk-margin>
-                <textarea id="id_post_text" name="post_text" rows="1" style="width: 90%;" placeholder="撰寫新推文..."></textarea>
+                <textarea id="id_post_text" name="post_text" rows="1" style="width: 90%;" placeholder="撰寫您的購買文..."></textarea>
                 <input class="uk-button uk-button-primary" type="button" value="分享" onclick="submit_post();"/>
             </fieldset>
         </div>
@@ -117,7 +117,7 @@
                                 <table>
                                     <tr><td>
                                         <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
-                                            <i class="fa fa-check"></i>
+                                            <i class="fa fa-shopping-cart"></i>
                                         </a>
                                     </td></tr>
                                     <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
@@ -149,7 +149,7 @@
                                     <table>
                                         <tr><td>
                                             <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
-                                                <i class="fa fa-check"></i>
+                                                <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </td></tr>
                                         <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
@@ -183,7 +183,7 @@
                                     <table>
                                         <tr><td>
                                             <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
-                                                <i class="fa fa-check"></i>
+                                                <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </td></tr>
                                         <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
