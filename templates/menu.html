@@ -94,9 +94,9 @@
                 <div class="uk-width-medium-1-10">&nbsp;</div>
                 <div class="uk-width-medium-7-10">
 
-                    <div class="uk-text-large uk-margin-bottom uk-text-bold uk-text-danger">
+                    <div class="uk-text-large uk-margin-bottom">
                         <img style="display:none" class="circular_40px_middle" width="50px" height="50px" src="{% static "img\logo2.png" %}" alt="">
-                        CityHunt - 分享城市中的大小事  <div class="uk-badge uk-badge-danger">beta 台北</div></div>
+                        <span class="uk-text-bold uk-text-danger uk-text-large">CostcoHunt</span><span class="uk-text-small uk-text-muted"> - 分享Costco販賣的好物</span>  <div class="uk-badge uk-badge-danger">beta</div></div>
                     <ul class="uk-tab uk-tab-grid uk-margin-bottom">
                     {% if current_page == "hottest" %}
                         <li class="uk-active">
@@ -117,7 +117,7 @@
 
                     <div id="err_alert" style="display:none" class="uk-alert uk-alert-warning" data-uk-alert>
                         <a href="" class="uk-alert-close uk-close"></a>
-                        <div calss="uk-text-large">請先登入再推薦喔 :)</div>
+                        <div calss="uk-text-large">請先登入喔 :)</div>
                     </div>
                       {% block leave_message %}
                       {% endblock %}
@@ -140,8 +140,8 @@
                             <button id="user_btn" class="uk-animation-scale-up uk-icon-button-40"></button>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a id="fb_login_btn" href="javascript:loginToFB()">Login</a></li>
-                                    <li><a id="fb_logout_btn" href="javascript:logoutFB()" style="display:none">Logout</a></li>
+                                    <li><a id="fb_login_btn" href="javascript:loginToFB()">登入</a></li>
+                                    <li><a id="fb_logout_btn" href="javascript:logoutFB()" style="display:none">登出</a></li>
                                 </ul>
                             </div>
                         </div>
