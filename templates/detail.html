@@ -75,7 +75,7 @@
 
     <article class="uk-article">
         <p class="uk-article-meta"></p>
-        <p class="uk-article-lead uk-text-bold">{{ like_list.count }} 個人購買過這項商品:</p>
+        <p class="uk-article-lead uk-text-bold">{{ like_list.count }} 個人推薦這項商品:</p>
         {% for like in like_list %}
             <img id="img_{{ like.user.fb_id }}" class="uk-margin-left uk-icon-button-40 uk-animation-scale-up" width="40px" height="40px" src="https://graph.facebook.com/{{ like.user.fb_id }}/picture?type=square" alt="">
         {%  endfor %}
@@ -93,8 +93,8 @@
                 <h4 class="uk-comment-title">{{ post_obj.user.name }}</h4>
                 <ul class="uk-comment-meta uk-subnav uk-subnav-line">
                     <li>{{ post_obj.pub_date_str }}</li>
-                    <li>{{ like_list.count }} 個人購買過</li>
-                    <li><a href="javascript:like({{ post_obj.id }});"><i id="like_btn" class="fa fa-shopping-cart fa-lg uk-text-muted" onmouseover="btn_on_mouse_over(self);" onmouseout="btn_on_mouse_out(self);"></i></a></li>
+                    <li>{{ like_list.count }} 個人推薦</li>
+                    <li><a href="javascript:like({{ post_obj.id }});"><i id="like_btn" class="fa fa-thumbs-o-up fa-lg uk-text-muted" onmouseover="btn_on_mouse_over(self);" onmouseout="btn_on_mouse_out(self);"></i></a></li>
                 </ul>
             </header>
             <div class="uk-comment-body">{{ post_obj.post_text }}</div>

@@ -59,12 +59,13 @@
                       if(data.result == 'like')
                       {
                         self.className = self.className.split(" uk-text-muted").join("");
+                        self.className = self.className.split(" not_like").join("");
                         $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count + 1).toString();
                       }
                       else if(data.result == 'not_like')
                       {
                         if(self.className.indexOf('not_like') < 0)
-                            self.className = self.className + " uk-text-muted";
+                            self.className = self.className + " uk-text-muted not_like";
                         $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count - 1).toString();
                       }
 
@@ -138,11 +139,20 @@
                         <table>
                             <tr>
                                 <td width="30px">
-                                    <div class="uk-text-center" id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}<br>
-                                        <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
-                                            <i class="fa fa-shopping-cart"></i>
-                                        </a>
-                                    </div>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
+                                                    <i class="fa fa-thumbs-o-up"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr style="text-align: center">
+                                            <td>
+                                                <span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                                 <td width="50px">
                                     <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
@@ -171,7 +181,7 @@
                                     <table>
                                         <tr><td>
                                             <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
-                                                <i class="fa fa-shopping-cart"></i>
+                                                <i class="fa fa-thumbs-o-up"></i>
                                             </a>
                                         </td></tr>
                                         <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
@@ -204,7 +214,7 @@
                                     <table>
                                         <tr><td>
                                             <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
-                                                <i class="fa fa-shopping-cart"></i>
+                                                <i class="fa fa-thumbs-o-up"></i>
                                             </a>
                                         </td></tr>
                                         <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
