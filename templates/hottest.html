@@ -100,6 +100,17 @@
     }
 {% endblock %}
 
+{% block subscribe %}
+    <!--form id="subscribe_form" style="" class="uk-form uk-margin-bottom" action="/subscribe/add/" method="post">
+        <div class="uk-form">
+            <fieldset data-uk-margin>
+                <input type="text" id="id_post_title" maxlength="30" name="post_title" style="width: 90%;" placeholder="你的信箱" onfocus="change_to_edit_mode();" onblur="change_to_view_mode();"></textarea>
+                <input class="uk-button uk-button-primary" type="button" value="訂閱" onclick="submit_post();"/>
+            </fieldset>
+        </div>
+    </form-->
+{% endblock %}
+
 
 {% block leave_message %}
     <form id="post_form" style="" class="uk-form uk-margin-bottom" action="/add/" method="post">
@@ -127,14 +138,11 @@
                         <table>
                             <tr>
                                 <td width="30px">
-                                    <table>
-                                        <tr><td>
-                                            <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
-                                                <i class="fa fa-shopping-cart"></i>
-                                            </a>
-                                        </td></tr>
-                                        <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
-                                    </table>
+                                    <div class="uk-text-center" id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}<br>
+                                        <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </a>
+                                    </div>
                                 </td>
                                 <td width="50px">
                                     <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
