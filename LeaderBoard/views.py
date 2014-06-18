@@ -34,9 +34,11 @@ def add_post_page(request):
         if form.is_valid():
             city = City.objects.filter(id=form.cleaned_data['city_id'])[0]
             user = User.objects.filter(fb_id=form.cleaned_data['user_id'])[0]
-            post = Post(post_text=form.cleaned_data['post_text'], city=city, user=user, pub_date=get_utc_now())
+            post = Post(post_text=form.cleaned_data['post_text'], post_title=form.cleaned_data['post_title'], city=city, user=user, pub_date=get_utc_now())
             post.save()
-            return HttpResponseRedirect('/hottest/')
+        else:
+            print form.errors
+    return HttpResponseRedirect('/hottest/')
 
 
 def add_comment_page(request):
@@ -47,7 +49,9 @@ def add_comment_page(request):
             user = User.objects.filter(fb_id=form.cleaned_data['user_id'])[0]
             comment = Comment(comment_text=form.cleaned_data['comment_text'], post=post, user=user, pub_date=get_utc_now())
             comment.save()
-            return HttpResponseRedirect("/hottest/%d" % post.id)
+        else:
+            print form.errors
+    return HttpResponseRedirect("/hottest/%d" % post.id)
 
 
 def add_post_like_page(request):
@@ -72,13 +76,19 @@ def add_post_like_page(request):
 
 def post_detail_page(request, post_id):
     try:
+        user_id = 0
+        if 'user_id' in request.COOKIES:
+            user_id = request.COOKIES.get('user_id')
         post = Post.objects.filter(id=post_id)[0]
         comment_list = Comment.objects.filter(post=post)
         like_list = PostLike.objects.filter(post=post)
+        logged_user = User.objects.filter(fb_id=user_id)
+        liked = PostLike.objects.filter(post=post, user=logged_user).count()
         return render_to_response("detail.html", {"current_page": "hottest",
                                                   "post_obj": post,
                                                   "comment_list": comment_list,
                                                   "like_list": like_list,
+                                                  "liked": liked,
                                                   "user_form": UserForm(),
                                                   "post_like_form": PostLikeForm()},
                                                   context_instance = RequestContext(request))

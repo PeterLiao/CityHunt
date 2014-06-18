@@ -6,43 +6,34 @@
 
 
 {% block fb_status_change_callback %}
-    if(fb_connected)
-    {
-        //$("#comment_form").css("display", "");
-    }
-    else
-    {
-        //$("#comment_form").css("display", "none");
-    }
 {% endblock %}
 
 
 {% block fb_profile_ready_callback %}
     $("#comment_form")[0].user_id.value = response_data.id;
     $("#post_like_form")[0].user_id.value = response_data.id;
-    if($("#" + response_data.id).length == 1)
+    if(do_you_like_this_post())
     {
         $("#like_btn")[0].className = $("#like_btn")[0].className.split("uk-text-muted").join("");
-        console.log('you like it');
-    }
-    else
-    {
-        console.log('you not like it');
     }
 {% endblock %}
 
 
 {% block javascript %}
+    function do_you_like_this_post()
+    {
+        return {{ liked }};
+    }
     function btn_on_mouse_over(self)
     {
-        if($("#" + $("#comment_form")[0].user_id.value).length == 0)
+        if(!do_you_like_this_post())
             $("#like_btn")[0].className = $("#like_btn")[0].className.split("uk-text-muted").join("");
         else
             $("#like_btn")[0].className = $("#like_btn")[0].className + " uk-text-muted";
     }
     function btn_on_mouse_out(self)
     {
-        if($("#" + $("#comment_form")[0].user_id.value).length == 0)
+        if(!do_you_like_this_post())
             $("#like_btn")[0].className = $("#like_btn")[0].className + " uk-text-muted";
         else
             $("#like_btn")[0].className = $("#like_btn")[0].className.split("uk-text-muted").join("");
@@ -59,19 +50,7 @@
                   success: function(data)
                   {
                       console.log(data);
-                      /*var curr_like_count = parseInt($("#like_with_post_id_"+self.id)[0].innerText);
-                      if(data.result == 'like')
-                      {
-                        self.className = self.className.split(" not_like").join("");
-                        $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count + 1).toString();
-                      }
-                      else if(data.result == 'not_like')
-                      {
-                        if(self.className.indexOf('not_like') < 0)
-                            self.className = self.className + " not_like";
-                        $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count - 1).toString();
-                      }*/
-                    window.location.href = "/hottest/" + post_id;
+                      window.location.href = "/hottest/" + post_id;
 
                   },
                   error: function(err)
@@ -144,7 +123,7 @@
         <input type="hidden" id="post_id" name="post_id" value="{{ post_obj.id }}">
         <div class="uk-form-row">
             <fieldset data-uk-margin>
-                <textarea id="comment_text" name="comment_text" rows="5" style="width:90%" placeholder="回覆給{{ post_obj.user.name }}..."></textarea>
+                <textarea id="comment_text" name="comment_text" maxlength="60" rows="5" style="width:90%" placeholder="回覆給{{ post_obj.user.name }}..."></textarea>
                 <input class="uk-button uk-button-primary" type="button" value="回覆" onclick="submit_comment();"/>
             </fieldset>
         </div>
@@ -157,11 +136,6 @@
 
 
 {% block form %}
-    <form id="like_user_list">
-        {% for like in like_list %}
-            <input type="hidden" id="{{ like.user.fb_id }}">
-        {% endfor %}
-    </form>
     <form id="post_like_form" style="display:none" action="/hottest/like/add/" method="post">
         {% csrf_token %}
         {{ post_like_form.as_p }}

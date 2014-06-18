@@ -4,13 +4,14 @@ from django import forms
 
 
 class PostForm(forms.Form):
-    post_text = forms.CharField(max_length=200)
+    post_text = forms.CharField(max_length=60)
+    post_title = forms.CharField(max_length=30)
     city_id = forms.IntegerField()
     user_id = forms.IntegerField()
 
 
 class CommentForm(forms.Form):
-    comment_text = forms.CharField(max_length=200)
+    comment_text = forms.CharField(max_length=60)
     post_id = forms.IntegerField()
     user_id = forms.IntegerField()
 
@@ -21,6 +22,6 @@ class PostLikeForm(forms.Form):
 
 
 class UserForm(forms.Form):
-    name = forms.CharField(max_length=200)
-    email = forms.CharField(max_length=200)
+    name = forms.CharField(max_length=60)
+    email = forms.CharField(max_length=60)
     user_id = forms.IntegerField()

@@ -4,13 +4,13 @@ from LeaderBoard.common import get_formatted_timedelta_by_now
 
 
 class City(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=60)
     pub_date = models.DateTimeField('date published')
 
 
 class User(models.Model):
-    name = models.CharField(max_length=200)
-    password = models.CharField(max_length=200)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=60)
     email = models.EmailField()
     fb_id = models.IntegerField(primary_key=True)
     pub_date = models.DateTimeField('date published')
@@ -18,7 +18,8 @@ class User(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(User)
-    post_text = models.CharField(max_length=200)
+    post_text = models.CharField(max_length=60)
+    post_title = models.CharField(max_length=30)
     city = models.ForeignKey(City)
     pub_date = models.DateTimeField('date published')
 
@@ -31,7 +32,7 @@ class Post(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User)
     post = models.ForeignKey(Post)
-    comment_text = models.CharField(max_length=200)
+    comment_text = models.CharField(max_length=60)
     pub_date = models.DateTimeField('date published')
 
     def get_formatted_timedelta(self):

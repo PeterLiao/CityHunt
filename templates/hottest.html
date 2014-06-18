@@ -80,6 +80,17 @@
     {
         $("#id_post_text")[0].rows = row.toString();
     }
+    function change_to_edit_mode()
+    {
+        $("#id_post_text").css("display", "");
+    }
+    function change_to_view_mode()
+    {
+        if(!$("#id_post_text").is(":focus") || !$("#id_post_title").is(":focus"))
+        {
+            $("#id_post_text").css("display", "none");
+        }
+    }
     function submit_post()
     {
         if(isLogged())
@@ -97,8 +108,9 @@
         <input type="hidden" id="city_id" name="city_id" value="1">
         <div class="uk-form">
             <fieldset data-uk-margin>
-                <textarea id="id_post_text" name="post_text" rows="1" style="width: 90%;" placeholder="撰寫您的購買文..."></textarea>
-                <input class="uk-button uk-button-primary" type="button" value="分享" onclick="submit_post();"/>
+                <input type="text" id="id_post_title" maxlength="30" name="post_title" style="width: 90%;" placeholder="林鳳營鮮乳" onfocus="change_to_edit_mode();" onblur="change_to_view_mode();"></textarea>
+                <input class="uk-button uk-button-primary" type="button" value="推文" onclick="submit_post();"/>
+                <textarea id="id_post_text" name="post_text" maxlength="60" rows="4" style="display:none; width: 90%;" placeholder="又香又濃是家人小孩的最愛" onfocus="change_to_edit_mode();" onblur="change_to_view_mode();"></textarea>
             </fieldset>
         </div>
     </form>
@@ -106,35 +118,37 @@
 
 {% block hot_list %}
     <!-- today's hot list-->
-    <article class="uk-article">
-        <h1 class="uk-text-large uk-text-bold uk-text-muted"><i class="fa fa-calendar fa-lg"></i>  {{ today }}</h1>
-        <ul class="uk-list uk-list-space uk-margin-left">
-            {% for data in today_list %}
-                <li>
-                    <table>
-                        <tr>
-                            <td width="30px">
-                                <table>
-                                    <tr><td>
-                                        <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
-                                            <i class="fa fa-shopping-cart"></i>
-                                        </a>
-                                    </td></tr>
-                                    <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
-                                </table>
-                            </td>
-                            <td width="50px">
-                                <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
-                            </td>
-                            <td>
-                                <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/">{{ data.post.post_text }}</a> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a>
-                            </td>
-                        </tr>
-                    </table>
-                </li>
-            {% endfor %}
-        </ul>
-    </article>
+    {% if today_list %}
+        <article class="uk-article">
+            <h1 class="uk-text-large uk-text-bold uk-text-muted"><i class="fa fa-calendar fa-lg"></i>  {{ today }}</h1>
+            <ul class="uk-list uk-list-space uk-margin-left">
+                {% for data in today_list %}
+                    <li>
+                        <table>
+                            <tr>
+                                <td width="30px">
+                                    <table>
+                                        <tr><td>
+                                            <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
+                                                <i class="fa fa-shopping-cart"></i>
+                                            </a>
+                                        </td></tr>
+                                        <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
+                                    </table>
+                                </td>
+                                <td width="50px">
+                                    <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
+                                </td>
+                                <td>
+                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/"><span class="uk-text-bold">{{ data.post.post_title }}</span></a><span class="uk-article-lead uk-text-muted"> {{ data.post.post_text }}</span> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
+    {% endif %}
 
     <!-- yesterday's hot list-->
     {% if yesterday_list %}
@@ -159,8 +173,7 @@
                                     <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
                                 </td>
                                 <td>
-                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/">{{ data.post.post_text }}</a> .
-                                    <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a> .
+                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/"><span class="uk-text-bold">{{ data.post.post_title }}</span></a><span class="uk-article-lead uk-text-muted"> {{ data.post.post_text }}</span> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a>
                                 </td>
                             </tr>
                         </table>
@@ -193,8 +206,7 @@
                                     <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
                                 </td>
                                 <td>
-                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/">{{ data.post.post_text }}</a> .
-                                    <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a> .
+                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/"><span class="uk-text-bold">{{ data.post.post_title }}</span></a><span class="uk-article-lead uk-text-muted"> {{ data.post.post_text }}</span> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a>
                                 </td>
                             </tr>
                         </table>
