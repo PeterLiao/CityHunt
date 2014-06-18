@@ -42,3 +42,8 @@
   background-image: linear-gradient(to bottom, #ffffff, #eeeeee);
   text-shadow: 0 1px 0 #ffffff;
 }
+
+.underline {
+ color:#0077dd;
+ text-decoration: underline;
+}

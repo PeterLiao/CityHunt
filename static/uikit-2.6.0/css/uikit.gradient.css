@@ -6325,6 +6325,14 @@ a.uk-thumbnail:focus {
 .uk-text-danger {
   color: #d85030 !important;
 }
+
+.uk-text-sky-blue {
+  color: #0077dd !important;
+}
+
+.uk-text-rose-red {
+  color: #c91c37 !important;
+}
 /* Alignment modifiers
  ========================================================================== */
 .uk-text-left {
