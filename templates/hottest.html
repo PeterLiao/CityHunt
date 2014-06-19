@@ -55,21 +55,7 @@
                   data: $("#post_like_form").serialize(),
                   success: function(data)
                   {
-                      console.log(data);
-                      var curr_like_count = parseInt($("#like_with_post_id_"+self.id)[0].innerText);
-                      if(data.result == 'like')
-                      {
-                        self.className = self.className.split(" uk-text-muted").join("");
-                        self.className = self.className.split(" not_like").join("");
-                        $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count + 1).toString();
-                      }
-                      else if(data.result == 'not_like')
-                      {
-                        if(self.className.indexOf('not_like') < 0)
-                            self.className = self.className + " uk-text-muted not_like";
-                        $("#like_with_post_id_"+self.id)[0].innerText = (curr_like_count - 1).toString();
-                      }
-
+                      location.reload();
                   },
                   error: function(err)
                   {
@@ -106,7 +92,6 @@
                   data: $("#post_form").serialize(),
                   success: function(data)
                   {
-                    console.log(data);
                     windoow.location.href = "/hottest/";
                     submitting = false;
                   },
@@ -168,7 +153,7 @@
                                         </tr>
                                         <tr style="text-align: center">
                                             <td>
-                                                <span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span>
+                                                <span id="like_with_post_id_{{ data.post.id }}">{{ data.post.like_count }}</span>
                                             </td>
                                         </tr>
                                     </table>
@@ -177,7 +162,7 @@
                                     <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
                                 </td>
                                 <td>
-                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/"><span class="uk-text-bold">{{ data.post.post_title }}</span></a><span class="uk-article-lead uk-text-muted"> {{ data.post.post_text }}</span> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a>
+                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/"><span class="uk-text-bold">{{ data.post.post_title }}</span></a><span class="uk-article-lead uk-text-muted"> {{ data.post.post_text }}</span> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.post.comment_count }} 個留言</a>
                                 </td>
                             </tr>
                         </table>
@@ -203,14 +188,14 @@
                                                 <i class="fa fa-thumbs-o-up fa-lg"></i>
                                             </a>
                                         </td></tr>
-                                        <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
+                                        <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.post.like_count }}</span></td></tr>
                                     </table>
                                 </td>
                                 <td width="50px">
                                     <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
                                 </td>
                                 <td>
-                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/"><span class="uk-text-bold">{{ data.post.post_title }}</span></a><span class="uk-article-lead uk-text-muted"> {{ data.post.post_text }}</span> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a>
+                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/"><span class="uk-text-bold">{{ data.post.post_title }}</span></a><span class="uk-article-lead uk-text-muted"> {{ data.post.post_text }}</span> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.post.comment_count }} 個留言</a>
                                 </td>
                             </tr>
                         </table>
@@ -236,14 +221,14 @@
                                                 <i class="fa fa-thumbs-o-up fa-lg"></i>
                                             </a>
                                         </td></tr>
-                                        <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.like_count }}</span></td></tr>
+                                        <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.post.like_count }}</span></td></tr>
                                     </table>
                                 </td>
                                 <td width="50px">
                                     <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
                                 </td>
                                 <td>
-                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/"><span class="uk-text-bold">{{ data.post.post_title }}</span></a><span class="uk-article-lead uk-text-muted"> {{ data.post.post_text }}</span> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.comment_count }} 個留言</a>
+                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/"><span class="uk-text-bold">{{ data.post.post_title }}</span></a><span class="uk-article-lead uk-text-muted"> {{ data.post.post_text }}</span> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.post.comment_count }} 個留言</a>
                                 </td>
                             </tr>
                         </table>

@@ -26,7 +26,15 @@ class Post(models.Model):
     def get_formatted_timedelta(self):
         return get_formatted_timedelta_by_now(self.pub_date)
 
+    def get_like_count(self):
+        return PostLike.objects.filter(post=self).count()
+
+    def get_comment_count(self):
+        return Comment.objects.filter(post=self).count()
+
     pub_date_str = property(get_formatted_timedelta)
+    like_count = property(get_like_count)
+    comment_count = property(get_comment_count)
 
 
 class Comment(models.Model):

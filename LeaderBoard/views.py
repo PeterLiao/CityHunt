@@ -99,24 +99,21 @@ def post_detail_page(request, post_id):
 
 def get_post_data_by_date(start_date, end_date):
     data_list = []
-    post_list = Post.objects.filter(pub_date__gte=start_date, pub_date__lte=end_date).extra(order_by=['-pub_date'])
+    post_list = Post.objects.filter(pub_date__gte=start_date, pub_date__lte=end_date)
+    post_list = sorted(post_list, key=lambda x: x.like_count, reverse=True)
     for post in post_list:
-        comment_count = Comment.objects.filter(post=post).count()
-        like_count = PostLike.objects.filter(post=post).count()
-        data_list.append({"post": post, "comment_count": comment_count, "like_count": like_count, "liked": 0})
+        data_list.append({"post": post, "liked": 0})
     return data_list
-
 
 
 def get_post_data_by_date_ex(start_date, end_date, user_id):
     data_list = []
-    post_list = Post.objects.filter(pub_date__gte=start_date, pub_date__lte=end_date).extra(order_by=['-pub_date'])
+    post_list = Post.objects.filter(pub_date__gte=start_date, pub_date__lte=end_date)
+    post_list = sorted(post_list, key=lambda x: x.like_count, reverse=True)
     logged_user = User.objects.filter(fb_id=user_id)
     for post in post_list:
-        comment_count = Comment.objects.filter(post=post).count()
-        like_count = PostLike.objects.filter(post=post).count()
         liked = PostLike.objects.filter(post=post, user=logged_user).count()
-        data_list.append({"post": post, "comment_count": comment_count, "like_count": like_count, "liked": liked})
+        data_list.append({"post": post, "liked": liked})
     return data_list
 
 
@@ -133,7 +130,6 @@ def hottest_page(request):
     post_list_in_two_days_ago = get_post_data_by_date_ex(datetime.date.today()-timedelta(2),
                                                          datetime.date.today()-timedelta(1),
                                                          user_id)
-    print post_list_in_two_days_ago
     return render_to_response("hottest.html",
                               {"current_page": "hottest",
                                "today": get_formatted_date(datetime.date.today()),
