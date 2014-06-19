@@ -29,7 +29,6 @@
 
 
 {% block javascript %}
-    var submitting = false;
     function btn_on_mouse_over(self)
     {
         if(self.className.indexOf('not_like') < 0)
@@ -74,9 +73,9 @@
     }
     function change_to_view_mode()
     {
-        if(!$("#id_post_text").is(":focus") || !$("#id_post_title").is(":focus"))
+    if(!$("#id_post_text").is(":focus") || !$("#id_post_title").is(":focus"))
         {
-            if(submitting == false)
+            if($("#id_post_text")[0].value == '' && $("#id_post_title")[0].value == '')
                 $("#id_post_text").css("display", "none");
         }
     }
@@ -84,23 +83,7 @@
     {
         if(isLogged())
         {
-            //$("#post_form").submit();
-                submitting = true;
-                $.ajax({
-                  type: 'POST',
-                  url: '/add/',
-                  data: $("#post_form").serialize(),
-                  success: function(data)
-                  {
-                    windoow.location.href = "/hottest/";
-                    submitting = false;
-                  },
-                  error: function(err)
-                  {
-                      console.log(err);
-                      submitting = false;
-                  }
-            });
+            $("#post_form").submit();
         }
     }
 {% endblock %}
