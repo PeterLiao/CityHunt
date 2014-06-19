@@ -29,6 +29,7 @@
 
 
 {% block javascript %}
+    var submitting = false;
     function btn_on_mouse_over(self)
     {
         if(self.className.indexOf('not_like') < 0)
@@ -89,14 +90,32 @@
     {
         if(!$("#id_post_text").is(":focus") || !$("#id_post_title").is(":focus"))
         {
-            $("#id_post_text").css("display", "none");
+            if(submitting == false)
+                $("#id_post_text").css("display", "none");
         }
     }
     function submit_post()
     {
         if(isLogged())
         {
-            $("#post_form").submit();
+            //$("#post_form").submit();
+                submitting = true;
+                $.ajax({
+                  type: 'POST',
+                  url: '/add/',
+                  data: $("#post_form").serialize(),
+                  success: function(data)
+                  {
+                    console.log(data);
+                    windoow.location.href = "/hottest/";
+                    submitting = false;
+                  },
+                  error: function(err)
+                  {
+                      console.log(err);
+                      submitting = false;
+                  }
+            });
         }
     }
 {% endblock %}
@@ -121,7 +140,7 @@
         <div class="uk-form">
             <fieldset data-uk-margin>
                 <input type="text" id="id_post_title" maxlength="30" name="post_title" style="width: 90%;" placeholder="撰寫推薦的商品名稱..." onfocus="change_to_edit_mode();" onblur="change_to_view_mode();"></textarea>
-                <input class="uk-button uk-button-primary" type="button" value="推文" onclick="submit_post();"/>
+                <input id="post_btn" class="uk-button uk-button-primary" type="button" value="推文" onclick="submit_post();"/>
                 <textarea id="id_post_text" name="post_text" maxlength="60" rows="4" style="display:none; width: 90%;" placeholder="商品介紹或使用心得" onfocus="change_to_edit_mode();" onblur="change_to_view_mode();"></textarea>
             </fieldset>
         </div>
