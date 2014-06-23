@@ -121,15 +121,35 @@ def hottest_page(request):
     user_id = 0
     if 'user_id' in request.COOKIES:
         user_id = request.COOKIES.get('user_id')
-    post_list_in_today = get_post_data_by_date_ex(datetime.date.today(),
-                                                  datetime.date.today()+timedelta(1),
-                                                  user_id)
-    post_list_in_yesterday = get_post_data_by_date_ex(datetime.date.today()-timedelta(1),
-                                                      datetime.date.today(),
+
+    days_ago = 0
+    while True:
+        post_list_in_today = get_post_data_by_date_ex(datetime.date.today()-timedelta(days_ago),
+                                                      datetime.date.today()+timedelta(1)-timedelta(days_ago),
                                                       user_id)
-    post_list_in_two_days_ago = get_post_data_by_date_ex(datetime.date.today()-timedelta(2),
-                                                         datetime.date.today()-timedelta(1),
-                                                         user_id)
+        if len(post_list_in_today) > 0 or days_ago >= 30:
+            break
+        else:
+            days_ago += 1
+
+    while True:
+        post_list_in_yesterday = get_post_data_by_date_ex(datetime.date.today()-timedelta(1)-timedelta(days_ago),
+                                                        datetime.date.today()-timedelta(days_ago),
+                                                        user_id)
+        if len(post_list_in_yesterday) > 0 or days_ago >= 30:
+            break
+        else:
+            days_ago += 1
+
+    while True:
+        post_list_in_two_days_ago = get_post_data_by_date_ex(datetime.date.today()-timedelta(2)-timedelta(days_ago),
+                                                            datetime.date.today()-timedelta(1)-timedelta(days_ago),
+                                                            user_id)
+        if len(post_list_in_two_days_ago) > 0 or days_ago >= 30:
+            break
+        else:
+            days_ago += 1
+
     return render_to_response("hottest.html",
                               {"current_page": "hottest",
                                "today": get_formatted_date(datetime.date.today()),
