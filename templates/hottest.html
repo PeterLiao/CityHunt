@@ -220,6 +220,39 @@
             </ul>
         </article>
     {%  endif  %}
+
+    <!-- three days ago -->
+    {% if three_days_ago_list %}
+        <article class="uk-article">
+            <h1 class="uk-text-large uk-text-bold uk-text-muted"><i class="fa fa-calendar fa-lg"></i>  {{ three_days_ago }}</h1>
+            <ul class="uk-list uk-list-space uk-margin-left">
+                {% for data in three_days_ago_list %}
+                    <li>
+                        <table>
+                            <tr>
+                                <td width="30px">
+                                    <table>
+                                        <tr><td>
+                                            <a id="{{ data.post.id }}" class="uk-icon {%  if data.liked == 0 %}uk-text-muted not_like{%  endif  %}" href="#" onmouseover="btn_on_mouse_over(this);" onmouseout="btn_on_mouse_out(this);" onmousedown="like(this);">
+                                                <i class="fa fa-thumbs-o-up fa-lg"></i>
+                                            </a>
+                                        </td></tr>
+                                        <tr><td><span id="like_with_post_id_{{ data.post.id }}">{{ data.post.like_count }}</span></td></tr>
+                                    </table>
+                                </td>
+                                <td width="50px">
+                                    <img class="uk-animation-scale-up uk-icon-button-40" width="40px" height="40px" src="https://graph.facebook.com/{{ data.post.user.fb_id }}/picture?type=square" alt="">
+                                </td>
+                                <td>
+                                    <a class="uk-article-lead" href="/hottest/{{ data.post.id }}/"><span class="uk-text-bold">{{ data.post.post_title }}</span></a><span class="uk-article-lead uk-text-muted"> {{ data.post.post_text }}</span> . <a class="uk-text-warning uk-text-small" href="/hottest/{{ data.post.id }}/">{{ data.post.comment_count }} 個留言</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
+    {%  endif  %}
 {% endblock %}
 
 

@@ -150,6 +150,15 @@ def hottest_page(request):
         else:
             days_ago += 1
 
+    while True:
+        post_list_in_three_days_ago = get_post_data_by_date_ex(datetime.date.today()-timedelta(3)-timedelta(days_ago),
+                                                            datetime.date.today()-timedelta(2)-timedelta(days_ago),
+                                                            user_id)
+        if len(post_list_in_three_days_ago) > 0 or days_ago >= 30:
+            break
+        else:
+            days_ago += 1
+
     return render_to_response("hottest.html",
                               {"current_page": "hottest",
                                "today": get_formatted_date(datetime.date.today()),
@@ -158,6 +167,8 @@ def hottest_page(request):
                                "yesterday_list": post_list_in_yesterday,
                                "two_days_ago_list": post_list_in_two_days_ago,
                                "two_days_ago": get_formatted_date(datetime.date.today()-timedelta(2)),
+                               "three_days_ago_list": post_list_in_three_days_ago,
+                               "three_days_ago": get_formatted_date(datetime.date.today()-timedelta(3)),
                                "user_form": UserForm(),
                                "post_like_form": PostLikeForm()},
                                context_instance = RequestContext(request))
